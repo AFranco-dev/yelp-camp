@@ -1,49 +1,45 @@
-<!DOCTYPE html>
-<html>
-  <%- include("../partials/head") %>
-  <body>
-    <header><%- include("../partials/navbar") %></header>
-    <main class="container mt-5">
-      <h1 class="mb-3">Create New Campground</h1>
-      <form action="/campgrounds" method="POST">
-        <div class="mb-3">
-          <label for="title" class="form-label">Title:</label
-          ><input
-            placeholder="Title"
-            name="title"
-            id="title"
-            class="form-control"
-          />
-        </div>
-        <div class="mb-3">
-          <label for="price" class="form-label">Price:</label
-          ><input
-            placeholder="Price"
-            name="price"
-            id="price"
-            class="form-control"
-          />
-        </div>
-        <div class="mb-3">
-          <label for="description" class="form-label">Description:</label
-          ><input
-            placeholder="Description"
-            name="description"
-            id="description"
-            class="form-control"
-          />
-        </div>
-        <div class="mb-3">
-          <label for="location" class="form-label">Location:</label
-          ><input
-            placeholder="Location"
-            name="location"
-            id="location"
-            class="form-control"
-          />
-        </div>
-        <button class="btn btn-primary" type="submit">Create</button>
-      </form>
-    </main>
-  </body>
-</html>
+<% layout("layouts/standard") %>
+<!-- NAVBAR -->
+<%- include("../partials/navbar") %>
+<main class="container mt-5">
+  <h1 class="mb-3">Create New Campground</h1>
+  <form action="/campgrounds" method="POST">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title:</label
+      ><input
+        placeholder="Title"
+        name="title"
+        id="title"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Price:</label
+      ><input
+        placeholder="Price"
+        name="price"
+        id="price"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description:</label
+      ><input
+        placeholder="Description"
+        name="description"
+        id="description"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="location" class="form-label">Location:</label
+      ><input
+        placeholder="Location"
+        name="location"
+        id="location"
+        class="form-control"
+      />
+    </div>
+    <button class="btn btn-primary" type="submit">Create</button>
+  </form>
+</main>

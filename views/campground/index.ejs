@@ -1,27 +1,23 @@
-<!DOCTYPE html>
-<html>
-  <%- include("../partials/head") %>
-  <body>
-    <header><%- include("../partials/navbar") %></header>
-    <main class="container mt-5">
-      <ul class="mb-3">
-        <% for( const campground of campgrounds ) { %>
-        <li class="border-bottom">
-          <div><%= campground.title %></div>
-          <div><%= campground.price %></div>
-          <div><%= campground.description %></div>
-          <div><%= campground.location %></div>
-          <div>
-            <a class="btn btn-primary" href="/campgrounds/<%= campground.id %>"
-              >Detalles</a
-            >
-          </div>
-        </li>
-        <% } %>
-      </ul>
-      <a href="campgrounds/create" class="btn btn-primary">
-        Create New Campground
-      </a>
-    </main>
-  </body>
-</html>
+<% layout("layouts/standard") %>
+<!-- NAVBAR -->
+<%- include("../partials/navbar") %>
+<main class="container mt-5">
+  <ul class="mb-3">
+    <% for( const campground of campgrounds ) { %>
+    <li class="border-bottom">
+      <div><%= campground.title %></div>
+      <div><%= campground.price %></div>
+      <div><%= campground.description %></div>
+      <div><%= campground.location %></div>
+      <div>
+        <a class="btn btn-primary" href="/campgrounds/<%= campground.id %>"
+          >Detalles</a
+        >
+      </div>
+    </li>
+    <% } %>
+  </ul>
+  <a href="campgrounds/create" class="btn btn-primary">
+    Create New Campground
+  </a>
+</main>
