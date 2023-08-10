@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <%- include("../partials/head") %>
+  <body>
+    <header><%- include("../partials/navbar") %></header>
+    <main class="container mt-5">
+      <p>
+        <div><%= campground.title %></div>
+        <div><%= campground.price %></div>
+        <div><%= campground.description %></div>
+        <div><%= campground.location %></div>
+        <div class="d-flex gap-1">
+          <a href="/campgrounds" class="btn btn-primary">Back</a>
+          <a href="/campgrounds/<%= campground.id %>/edit" class="btn btn-primary">Edit</a>
+          <form
+          class=""
+          action="/campgrounds/<%= campground.id %>?_method=DELETE"
+          method="post">
+            <button class="btn btn-danger" type="submit">Delete</button>
+          </form>
+        </div>
+      </p>
+    </main>
+  </body>
+</html>
