@@ -1,8 +1,9 @@
 // EXTERNAL DEPENDENCIES
 const mongoose = require("mongoose");
 const express = require("express");
-const path = require("path");
 const methodOverride = require("method-override");
+const ejsMate = require("ejs-mate");
+const path = require("path");
 
 // EXPRESS CONSTS
 const app = express();
@@ -28,6 +29,7 @@ async function main() {
 }
 
 // EXPRESS APP SET
+app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 // EXPRESS APP USE MIDDLEWARE
