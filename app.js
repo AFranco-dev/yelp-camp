@@ -40,6 +40,8 @@ app.use(methodOverride("_method"));
 
 // GET HOME VIEW
 app.get("/", (req, res) => {
+  // res.locals.name = "Yelp Camp";
+  // res.render("home");
   res.render("home", { name: "Yelp Camp" });
 });
 

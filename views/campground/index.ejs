@@ -1,6 +1,9 @@
+<!-- LAYOUT -->
 <% layout("layouts/standard") %>
 <!-- NAVBAR -->
 <%- include("../partials/navbar") %>
+<!-- prettier-ignore -->
+<% locals.name != undefined ? block('title').append(`<title>${name}</title>`) : block('title').append("Not Found")%>
 <main class="container mt-5">
   <ul class="mb-3">
     <% for( const campground of campgrounds ) { %>

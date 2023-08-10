@@ -1,6 +1,9 @@
+<!-- LAYOUT -->
 <% layout("layouts/standard") %>
 <!-- NAVBAR -->
 <%- include("../partials/navbar") %>
+<!-- prettier-ignore -->
+<% locals.name != undefined ? block('title').append(`<title>${name}</title>`) : block('title').append("Not Found")%>
 <main class="container mt-5">
   <h1 class="mb-3">Create New Campground</h1>
   <form action="/campgrounds/<%= campground.id %>?_method=PUT" method="POST">
