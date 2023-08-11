@@ -18,6 +18,16 @@
         />
       </div>
       <div class="mb-3">
+        <label for="image" class="form-label">Image URL:</label
+        ><input
+          placeholder="Image URL"
+          name="image"
+          id="image"
+          class="form-control"
+          value="<%= campground.image %>"
+        />
+      </div>
+      <div class="mb-3">
         <label for="price" class="form-label">Price:</label
         ><input
           placeholder="Price"
@@ -29,14 +39,15 @@
         />
       </div>
       <div class="mb-3">
-        <label for="description" class="form-label">Description:</label
-        ><input
+        <label for="description" class="form-label">Description:</label>
+        <textarea
           placeholder="Description"
           name="description"
           id="description"
           class="form-control"
-          value="<%= campground.description %>"
-        />
+        >
+          <%= campground.description %>
+        </textarea>
       </div>
       <div class="mb-3">
         <label for="location" class="form-label">Location:</label

@@ -48,12 +48,13 @@ app.get("/", (req, res) => {
 app.post("/campgrounds", async (req, res) => {
   try {
     console.dir(req.body);
-    const { title, price, description, location } = req.body;
+    const { title, price, description, location, image } = req.body;
     const newCampground = new Campground({
       title,
       price,
       description,
       location,
+      image,
     });
     await newCampground.save();
     res.redirect("/campgrounds");
@@ -84,7 +85,7 @@ app.get("/campgrounds/:id", async (req, res) => {
 app.put("/campgrounds/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, price, description, location } = req.body;
+    const { title, price, description, location, image } = req.body;
     const campgroundEdited = await Campground.findByIdAndUpdate(
       id,
       {
@@ -92,6 +93,7 @@ app.put("/campgrounds/:id", async (req, res) => {
         price,
         description,
         location,
+        image,
       },
       { runValidators: true }
     );
