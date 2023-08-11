@@ -1,9 +1,13 @@
-<!-- LAYOUT -->
-<% layout("layouts/standard") %>
-<!-- NAVBAR -->
-<%- include("../partials/navbar") %>
-<!-- prettier-ignore -->
-<% locals.name != undefined ? block('title').append(`<title>${name}</title>`) : block('title').append("Not Found")%>
-<main class="container mt-5">
-  <h1>Yelp Camp</h1>
-</main>
+<!DOCTYPE html>
+<html>
+  <!-- prettier-ignore -->
+  <%- include("partials/head") %> 
+  <%- include("partials/body-open") %>
+  <%- include("partials/navbar") %>
+  <main class="container mt-5">
+    <h1>Yelp Camp</h1>
+  </main>
+  <!-- prettier-ignore -->
+  <%- include("partials/footer") %>
+  <%- include("partials/body-close") %>
+</html>

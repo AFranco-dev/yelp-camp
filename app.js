@@ -29,7 +29,6 @@ async function main() {
 }
 
 // EXPRESS APP SET
-app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 // EXPRESS APP USE MIDDLEWARE
@@ -40,8 +39,6 @@ app.use(methodOverride("_method"));
 
 // GET HOME VIEW
 app.get("/", (req, res) => {
-  // res.locals.name = "Yelp Camp";
-  // res.render("home");
   res.render("home", { name: "Yelp Camp" });
 });
 
