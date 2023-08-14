@@ -2,8 +2,8 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const methodOverride = require("method-override");
-const ejsMate = require("ejs-mate");
 const path = require("path");
+const morgan = require("morgan");
 
 // EXPRESS CONSTS
 const app = express();
@@ -36,6 +36,8 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+// LOGGER
+app.use(morgan("tiny"));
 
 // GET HOME VIEW
 app.get("/", (req, res) => {
