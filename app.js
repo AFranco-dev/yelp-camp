@@ -2,8 +2,12 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const methodOverride = require("method-override");
-const path = require("path");
 const morgan = require("morgan");
+const path = require("path");
+
+// INTERNAL DEPENDENCIES
+const AppError = require("./appError");
+const { wrapAsync } = require("./utilities");
 
 // EXPRESS CONSTS
 const app = express();
@@ -12,7 +16,7 @@ const dbPath = "mongodb://127.0.0.1:27017/yelp-camp";
 
 // MONGOOSE MODELS
 const Campground = require("./models/campground");
-const { title } = require("process");
+const { error } = require("console");
 
 // MONGOOSE SETUP
 async function main() {
@@ -131,6 +135,14 @@ app.delete("/campgrounds/:id", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+// CUSTOM ERROR HANDLER, TO DEFINE AN ERROR HANDLER THE
+// APP.USE NEED 4 PARAMETERS (err, req, res, next) TO
+// BE CONSIDERED AN ERROR HANDLER
+app.use((err, req, res, next) => {
+  const { message = "Oops! We got an error!", status = "500" } = err;
+  res.status(status).send(message);
 });
 
 // EXPRESS SERVER START AND DB CONNECTION
