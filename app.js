@@ -43,16 +43,19 @@ app.use(methodOverride("_method"));
 app.use(morgan("tiny"));
 
 // GET HOME VIEW
-app.get("/", (req, res) => {
-  res.render("home", { name: "Yelp Camp" });
-});
+app.get(
+  "/",
+  wrapSync((req, res, next) => {
+    res.render("home", { name: "Yelp Camp" });
+  })
+);
 
 // CAMPGROUND OPERATIONS
 // CREATE
 // CREATE NEW CAMPGROUND
 app.post(
   "/campgrounds",
-  wrapAsync(async (req, res) => {
+  wrapAsync(async (req, res, next) => {
     console.dir(req.body);
     const { title, price, description, location, image } = req.body;
     const newCampground = new Campground({
@@ -69,7 +72,7 @@ app.post(
 // SHOW CREATE NEW CAMPGROUND FORM
 app.get(
   "/campgrounds/create",
-  wrapSync((req, res) => {
+  wrapSync((req, res, next) => {
     res.render("campground/create", { name: "Create New Campground" });
   })
 );
@@ -78,7 +81,7 @@ app.get(
 // SHOW ALL CAMPGROUNDS
 app.get(
   "/campgrounds",
-  wrapAsync(async (req, res) => {
+  wrapAsync(async (req, res, next) => {
     const campgrounds = await Campground.find();
     res.render("campground/index", { campgrounds, name: "Campgrounds" });
   })
@@ -86,7 +89,7 @@ app.get(
 // SHOW CAMPGROUND WITH ID
 app.get(
   "/campgrounds/:id",
-  wrapAsync(async (req, res) => {
+  wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);
     res.render("campground/details", { campground, name: campground.title });
@@ -97,7 +100,7 @@ app.get(
 // EDIT CAMPGROUND BY ID
 app.put(
   "/campgrounds/:id",
-  wrapAsync(async (req, res) => {
+  wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const { title, price, description, location, image } = req.body;
     const campgroundEdited = await Campground.findByIdAndUpdate(
@@ -111,18 +114,13 @@ app.put(
       },
       { runValidators: true }
     );
-    if (campgroundEdited) {
-      console.log(campgroundEdited);
-      res.redirect(303, `/campgrounds/${id}`);
-    } else {
-      res.send("Campground not Found");
-    }
+    if (campgroundEdited) res.redirect(303, `/campgrounds/${id}`);
   })
 );
 // SHOW EDIT CAMPGROUND BY ID FORM
 app.get(
   "/campgrounds/:id/edit",
-  wrapAsync(async (req, res) => {
+  wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);
     res.render("campground/edit", {
@@ -136,15 +134,10 @@ app.get(
 // DELETE CAMPGROUND BY ID
 app.delete(
   "/campgrounds/:id",
-  wrapAsync(async (req, res) => {
+  wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const campgroundDeleted = await Campground.findByIdAndDelete(id);
-    if (campgroundDeleted) {
-      console.log(campgroundDeleted);
-      res.redirect(303, "/campgrounds");
-    } else {
-      res.send("Campground not Found");
-    }
+    if (campgroundDeleted) res.redirect(303, "/campgrounds");
   })
 );
 
@@ -170,8 +163,12 @@ app.use((err, req, res, next) => {
 // APP.USE NEED 4 PARAMETERS (err, req, res, next) TO
 // BE CONSIDERED AN ERROR HANDLER
 app.use((err, req, res, next) => {
-  const { message = "Oops! We got an error!", status = 500 } = err;
-  res.status(status).send(message);
+  const {
+    name = "No Name",
+    message = "Oops! We got an error!",
+    status = 500,
+  } = err;
+  res.status(status).render("error/error", { name, message, status });
 });
 
 // EXPRESS SERVER START AND DB CONNECTION
