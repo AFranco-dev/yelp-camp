@@ -6,8 +6,8 @@ const morgan = require("morgan");
 const path = require("path");
 
 // INTERNAL DEPENDENCIES
-const AppError = require("./appError");
-const { wrapAsync } = require("./utilities");
+const AppError = require("./utils/AppError");
+const { wrapAsync, wrapSync } = require("./utils/wrappers");
 
 // EXPRESS CONSTS
 const app = express();
@@ -16,7 +16,6 @@ const dbPath = "mongodb://127.0.0.1:27017/yelp-camp";
 
 // MONGOOSE MODELS
 const Campground = require("./models/campground");
-const { error } = require("console");
 
 // MONGOOSE SETUP
 async function main() {
@@ -51,8 +50,9 @@ app.get("/", (req, res) => {
 // CAMPGROUND OPERATIONS
 // CREATE
 // CREATE NEW CAMPGROUND
-app.post("/campgrounds", async (req, res) => {
-  try {
+app.post(
+  "/campgrounds",
+  wrapAsync(async (req, res) => {
     console.dir(req.body);
     const { title, price, description, location, image } = req.body;
     const newCampground = new Campground({
@@ -64,32 +64,40 @@ app.post("/campgrounds", async (req, res) => {
     });
     await newCampground.save();
     res.redirect("/campgrounds");
-  } catch (error) {
-    console.error(error);
-  }
-});
+  })
+);
 // SHOW CREATE NEW CAMPGROUND FORM
-app.get("/campgrounds/create", async (req, res) => {
-  res.render("campground/create", { name: "Create New Campground" });
-});
+app.get(
+  "/campgrounds/create",
+  wrapSync((req, res) => {
+    res.render("campground/create", { name: "Create New Campground" });
+  })
+);
 
 // READ
 // SHOW ALL CAMPGROUNDS
-app.get("/campgrounds", async (req, res) => {
-  const campgrounds = await Campground.find();
-  res.render("campground/index", { campgrounds, name: "Campgrounds" });
-});
+app.get(
+  "/campgrounds",
+  wrapAsync(async (req, res) => {
+    const campgrounds = await Campground.find();
+    res.render("campground/index", { campgrounds, name: "Campgrounds" });
+  })
+);
 // SHOW CAMPGROUND WITH ID
-app.get("/campgrounds/:id", async (req, res) => {
-  const { id } = req.params;
-  const campground = await Campground.findById(id);
-  res.render("campground/details", { campground, name: campground.title });
-});
+app.get(
+  "/campgrounds/:id",
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    const campground = await Campground.findById(id);
+    res.render("campground/details", { campground, name: campground.title });
+  })
+);
 
 // UPDATE
 // EDIT CAMPGROUND BY ID
-app.put("/campgrounds/:id", async (req, res) => {
-  try {
+app.put(
+  "/campgrounds/:id",
+  wrapAsync(async (req, res) => {
     const { id } = req.params;
     const { title, price, description, location, image } = req.body;
     const campgroundEdited = await Campground.findByIdAndUpdate(
@@ -109,21 +117,26 @@ app.put("/campgrounds/:id", async (req, res) => {
     } else {
       res.send("Campground not Found");
     }
-  } catch (error) {
-    console.log(error);
-  }
-});
+  })
+);
 // SHOW EDIT CAMPGROUND BY ID FORM
-app.get("/campgrounds/:id/edit", async (req, res) => {
-  const { id } = req.params;
-  const campground = await Campground.findById(id);
-  res.render("campground/edit", { campground, name: `Edit ${title}` });
-});
+app.get(
+  "/campgrounds/:id/edit",
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    const campground = await Campground.findById(id);
+    res.render("campground/edit", {
+      campground,
+      name: `Edit ${campground.title}`,
+    });
+  })
+);
 
 // DELETE
 // DELETE CAMPGROUND BY ID
-app.delete("/campgrounds/:id", async (req, res) => {
-  try {
+app.delete(
+  "/campgrounds/:id",
+  wrapAsync(async (req, res) => {
     const { id } = req.params;
     const campgroundDeleted = await Campground.findByIdAndDelete(id);
     if (campgroundDeleted) {
@@ -132,8 +145,17 @@ app.delete("/campgrounds/:id", async (req, res) => {
     } else {
       res.send("Campground not Found");
     }
-  } catch (error) {
-    console.log(error);
+  })
+);
+
+// PRINTING ERROR NAME FOR CHECKING ERROR MORE SPECIFICALLY
+app.use((err, req, res, next) => {
+  if (err.name) {
+    console.error(err.name);
+    next(err);
+  } else {
+    console.error("No Name Error");
+    next(err);
   }
 });
 
@@ -141,7 +163,7 @@ app.delete("/campgrounds/:id", async (req, res) => {
 // APP.USE NEED 4 PARAMETERS (err, req, res, next) TO
 // BE CONSIDERED AN ERROR HANDLER
 app.use((err, req, res, next) => {
-  const { message = "Oops! We got an error!", status = "500" } = err;
+  const { message = "Oops! We got an error!", status = 500 } = err;
   res.status(status).send(message);
 });
 

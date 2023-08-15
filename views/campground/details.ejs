@@ -5,11 +5,19 @@
   <%- include("../partials/body-open") %>
   <%- include("../partials/navbar") %>
   <main class="container my-5 d-flex align-items-center justify-content-center">
-    <div class="card" style="width: 80%; min-height: 600px">
+    <div class="card" style="width: 80%; max-width: 400px; min-height: 400px">
       <img src="<%= campground.image %>" class="card-img-top" alt="..." />
       <div class="card-body">
         <h5 class="card-title"><%= campground.title %></h5>
         <p class="card-text mb-auto"><%= campground.description %></p>
+        <div class="p-1 d-flex align-items-center justify-content-center">
+          <a
+            class="mt-auto btn btn-primary"
+            href="/campgrounds/<%= campground.id %>/edit"
+          >
+            Edit
+          </a>
+        </div>
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">Location: <%= campground.location %></li>
