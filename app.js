@@ -148,15 +148,22 @@ app.delete(
   })
 );
 
+// WILDCARD ROUTE FOR HANDLING NOT FOUND ROUTES
+app.all("*", (req, res, next) => {
+  next(new AppError("Not Found 404", 404));
+});
+
 // PRINTING ERROR NAME FOR CHECKING ERROR MORE SPECIFICALLY
+// ADDED STATUS AND MESSAGE ERROR ON CONSOLE
 app.use((err, req, res, next) => {
-  if (err.name) {
-    console.error(err.name);
-    next(err);
-  } else {
-    console.error("No Name Error");
-    next(err);
-  }
+  const {
+    name = "No Name",
+    message = "Oops! We got an error!",
+    status = 500,
+  } = err;
+  const msg = `Name: ${name}\nStatus: ${status}\nMessage: ${message}`;
+  console.error(msg);
+  next(err);
 });
 
 // CUSTOM ERROR HANDLER, TO DEFINE AN ERROR HANDLER THE
