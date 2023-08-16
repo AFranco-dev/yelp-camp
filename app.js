@@ -7,7 +7,8 @@ const path = require("path");
 
 // INTERNAL DEPENDENCIES
 const AppError = require("./utils/AppError");
-const { wrapAsync, wrapSync } = require("./utils/wrappers");
+const { catchAsync, catchSync } = require("./utils/catchers");
+const { campgroundSchema } = require("./validation/schemas");
 
 // EXPRESS CONSTS
 const app = express();
@@ -16,6 +17,7 @@ const dbPath = "mongodb://127.0.0.1:27017/yelp-camp";
 
 // MONGOOSE MODELS
 const Campground = require("./models/campground");
+const Review = require("./models/review");
 
 // MONGOOSE SETUP
 async function main() {
@@ -31,6 +33,16 @@ async function main() {
   }
 }
 
+// JOI SCHEMAS MIDDLEWARE
+const campgroundSchemaCheck = catchAsync(async (req, res, next) => {
+  const { error } = campgroundSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((x) => x.message).join(", ");
+    return next(new AppError(msg, 400));
+  } else {
+    next();
+  }
+});
 // EXPRESS APP SET
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -45,7 +57,7 @@ app.use(morgan("tiny"));
 // GET HOME VIEW
 app.get(
   "/",
-  wrapSync((req, res, next) => {
+  catchSync((req, res, next) => {
     res.render("home", { name: "Yelp Camp" });
   })
 );
@@ -55,7 +67,8 @@ app.get(
 // CREATE NEW CAMPGROUND
 app.post(
   "/campgrounds",
-  wrapAsync(async (req, res, next) => {
+  campgroundSchemaCheck,
+  catchAsync(async (req, res, next) => {
     console.dir(req.body);
     const { title, price, description, location, image } = req.body;
     const newCampground = new Campground({
@@ -72,7 +85,7 @@ app.post(
 // SHOW CREATE NEW CAMPGROUND FORM
 app.get(
   "/campgrounds/create",
-  wrapSync((req, res, next) => {
+  catchSync((req, res, next) => {
     res.render("campground/create", { name: "Create New Campground" });
   })
 );
@@ -81,7 +94,7 @@ app.get(
 // SHOW ALL CAMPGROUNDS
 app.get(
   "/campgrounds",
-  wrapAsync(async (req, res, next) => {
+  catchAsync(async (req, res, next) => {
     const campgrounds = await Campground.find();
     res.render("campground/index", { campgrounds, name: "Campgrounds" });
   })
@@ -89,7 +102,7 @@ app.get(
 // SHOW CAMPGROUND WITH ID
 app.get(
   "/campgrounds/:id",
-  wrapAsync(async (req, res, next) => {
+  catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);
     res.render("campground/details", { campground, name: campground.title });
@@ -100,7 +113,8 @@ app.get(
 // EDIT CAMPGROUND BY ID
 app.put(
   "/campgrounds/:id",
-  wrapAsync(async (req, res, next) => {
+  campgroundSchemaCheck,
+  catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const { title, price, description, location, image } = req.body;
     const campgroundEdited = await Campground.findByIdAndUpdate(
@@ -120,7 +134,7 @@ app.put(
 // SHOW EDIT CAMPGROUND BY ID FORM
 app.get(
   "/campgrounds/:id/edit",
-  wrapAsync(async (req, res, next) => {
+  catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);
     res.render("campground/edit", {
@@ -134,7 +148,7 @@ app.get(
 // DELETE CAMPGROUND BY ID
 app.delete(
   "/campgrounds/:id",
-  wrapAsync(async (req, res, next) => {
+  catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const campgroundDeleted = await Campground.findByIdAndDelete(id);
     if (campgroundDeleted) res.redirect(303, "/campgrounds");

@@ -16,9 +16,11 @@
             <div>
               <h5 class="card-title"><%= campground.title %></h5>
               <p class="card-text">
-                <% if (campground.description.length < 90) { %> <%=
+                <% if (campground.description) { %> <% if
+                (campground.description.length < 90) { %> <%=
                 campground.description %> <% } else { %> <%=
                 campground.description.substring(0,90).concat("...") %> <% } %>
+                <% } else { %> No Description <% } %>
               </p>
             </div>
             <div class="p-1 d-flex align-items-center justify-content-center">

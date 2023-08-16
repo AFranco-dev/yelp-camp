@@ -1,10 +1,10 @@
-const wrapAsync = function (fn) {
+const catchAsync = function (fn) {
   return function (req, res, next) {
     fn(req, res, next).catch((e) => next(e));
   };
 };
 
-const wrapSync = function (fn) {
+const catchSync = function (fn) {
   return function (req, res, next) {
     try {
       fn(req, res, next);
@@ -14,4 +14,4 @@ const wrapSync = function (fn) {
   };
 };
 
-module.exports = { wrapAsync, wrapSync };
+module.exports = { catchAsync, catchSync };
