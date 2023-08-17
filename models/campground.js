@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 
 // CONSTS
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 // MONGOOSE
 const CampgroundSchema = new Schema({
@@ -11,7 +11,7 @@ const CampgroundSchema = new Schema({
   price: Number,
   description: String,
   location: String,
-  reviews: [{ Type: Schema.Types.ObjectId(), ref: "Review" }],
+  reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
 });
 
 const Campground = mongoose.model("Campground", CampgroundSchema);
