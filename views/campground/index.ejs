@@ -23,13 +23,21 @@
                 <% } else { %> No Description <% } %>
               </p>
             </div>
-            <div class="p-1 d-flex align-items-center justify-content-center">
+            <div
+              class="gap-1 p-1 d-flex align-items-center justify-content-center"
+            >
               <a
                 class="mt-auto btn btn-primary"
                 href="/campgrounds/<%= campground.id %>"
               >
-                Detalles
+                Details
               </a>
+              <form
+                action="/campgrounds/<%= campground.id %>?_method=DELETE"
+                method="post"
+              >
+                <button class="btn btn-danger" type="submit">Delete</button>
+              </form>
             </div>
           </div>
           <ul class="list-group list-group-flush">

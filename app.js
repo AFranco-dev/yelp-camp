@@ -104,7 +104,7 @@ app.get(
   "/campgrounds/:id",
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
-    const campground = await Campground.findById(id);
+    const campground = await Campground.findById(id).populate("reviews");
     res.render("campground/details", { campground, name: campground.title });
   })
 );
@@ -152,6 +152,51 @@ app.delete(
     const { id } = req.params;
     const campgroundDeleted = await Campground.findByIdAndDelete(id);
     if (campgroundDeleted) res.redirect(303, "/campgrounds");
+  })
+);
+
+// CAMPGROUND REVIEWS OPERATIONS
+// CREATE
+// CREATE NEW REVIEW
+app.post(
+  "/campgrounds/:id/reviews",
+  catchAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const { body, rating } = req.body;
+    const review = new Review({ body, rating });
+    const savedReview = await review.save();
+    const updatedCampground = await Campground.findByIdAndUpdate(id, {
+      $push: { reviews: savedReview._id },
+    });
+    if (updatedCampground) res.redirect("back");
+  })
+);
+// db.campgrounds.find({_id: ObjectId("64d698bd4c68967599ddefc8")})
+
+// SHOW CREATE NEW REVIEW FORM
+// READ
+// UPDATE
+// EDIT REVIEW
+app.put(
+  "/campgrounds/:id/reviews",
+  catchAsync(async (req, res, next) => {
+    const { id } = req.params;
+  })
+);
+// SHOW EDIT REVIEW FORM
+// DELETE
+// DELETE REVIEW
+app.delete(
+  "/campgrounds/:id/reviews",
+  catchAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const { idReview } = req.body;
+    console.log(idReview);
+    await Campground.findByIdAndUpdate(id, {
+      $pull: { reviews: idReview },
+    });
+    await Review.findByIdAndDelete(idReview);
+    res.redirect("back");
   })
 );
 

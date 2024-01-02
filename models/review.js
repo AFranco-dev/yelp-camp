@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
 // MONGOOSE
 const ReviewSchema = new Schema({
   body: String,
-  rating: String,
+  rating: Number,
 });
 
 const Review = mongoose.model("Review", ReviewSchema);
