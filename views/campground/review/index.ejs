@@ -1,0 +1,81 @@
+<h5 class="card-title text-center my-2">Reviews</h5>
+<ul class="list-group list-group-flush">
+  <% let n = 0; %> <%for( const review of campground.reviews) { %>
+  <li
+    class="accordion d-flex flex-column gap-1 list-group-item"
+    id="accordion<% n %>"
+  >
+    <!-- DETALLES -->
+    <div class="accordion-item border-0">
+      <div
+        class="accordion-collapse collapse show"
+        id="details<%= n %>"
+        data-bs-parent="#accordion<% n %>"
+      >
+        <div class="">
+          <span class="fw-bold">Review:</span> <%= review.body %>
+        </div>
+        <div class="">
+          <span class="fw-bold">Rating:</span> <%= review.rating %>
+        </div>
+      </div>
+    </div>
+    <!-- EDICIÓN -->
+    <div class="accordion-item border-0">
+      <form
+        class="accordion-collapse collapse"
+        data-bs-parent="#accordion<% n %>"
+        id="edit<%= n %>"
+        action="/campgrounds/<%= campground.id %>/reviews?_method=DELETE"
+        method="post"
+      >
+        <input type="text" name="" id="" />
+        <input
+          class="d-none"
+          type="text"
+          name="idReview"
+          id=""
+          value="<%= review.id %>"
+        />
+        <button class="btn btn-danger" type="submit">Save</button>
+        <button
+          class="btn btn-primary"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#details<%= n %>"
+          aria-expanded="false"
+          aria-controls="details<%= n %>"
+        >
+          Cancel
+        </button>
+      </form>
+    </div>
+    <!-- BOTONES  -->
+    <div class="d-flex align-items-center justify-content-center gap-1">
+      <form
+        action="/campgrounds/<%= campground.id %>/reviews?_method=PUT"
+        method="post"
+      >
+        <input
+          class="d-none"
+          type="text"
+          name="idReview"
+          id=""
+          value="<%= review.id %>"
+        />
+        <button class="btn btn-danger" type="submit">Delete</button>
+      </form>
+      <button
+        class="btn btn-primary"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#edit<%= n %>"
+        aria-expanded="false"
+        aria-controls="edit<%= n %>"
+      >
+        Edit
+      </button>
+    </div>
+  </li>
+  <% n++; %> <% }%>
+</ul>

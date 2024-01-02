@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <!-- prettier-ignore -->
+  <%- include("../partials/head") %>
+  <%- include("../partials/body-open") %>
+  <%- include("../partials/navbar") %>
+  <main class="container my-5 d-flex align-items-center justify-content-center">
+    <div class="alert alert-danger">
+      <h2 class="alert-heading text-center">We got an error!</h2>
+      <p>
+        <div><span class="fw-bold">Message:</span> <%= message %></div>
+        <div><span class="fw-bold">Name:</span> <%= name %></div>
+        <div><span class="fw-bold">Status:</span> <%= status %></div>
+      </p>
+    </div>
+  </main>
+  <!-- prettier-ignore -->
+  <%- include("../partials/footer") %>
+  <%- include("../partials/body-close") %>
+</html>

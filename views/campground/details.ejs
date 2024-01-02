@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <!-- prettier-ignore -->
+  <%- include("../partials/head") %>
+  <%- include("../partials/body-open") %>
+  <%- include("../partials/navbar") %>
+  <main
+    class="container my-5 d-flex flex-column align-items-center justify-content-center"
+  >
+    <div class="card" style="width: 80%; max-width: 400px; min-height: 400px">
+      <img src="<%= campground.image %>" class="card-img-top" alt="..." />
+      <div class="card-body">
+        <h5 class="card-title"><%= campground.title %></h5>
+        <p class="card-text mb-auto"><%= campground.description %></p>
+        <div
+          class="mt-2 d-flex align-items-center justify-content-center gap-1"
+        >
+          <a
+            class="mt-auto btn btn-primary"
+            href="/campgrounds/<%= campground.id %>/edit"
+          >
+            Edit
+          </a>
+          <button
+            class="btn btn-primary"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseReview"
+            aria-expanded="false"
+            aria-controls="collapseReview"
+          >
+            Add Review
+          </button>
+          <form
+            action="/campgrounds/<%= campground.id %>?_method=DELETE"
+            method="post"
+          >
+            <button class="btn btn-danger" type="submit">Delete</button>
+          </form>
+        </div>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Location: <%= campground.location %></li>
+        <li class="list-group-item">Price: <%= campground.price %></li>
+      </ul>
+      <% if (campground.reviews) { %> <%- include("./review/index") %> <%} %>
+    </div>
+    <div
+      class="collapse mt-2"
+      style="width: 80%; max-width: 400px"
+      id="collapseReview"
+    >
+      <div class="card card-body w-100" style="max-width: 400px">
+        <%- include("./review/create") %>
+      </div>
+    </div>
+  </main>
+  <!-- prettier-ignore -->
+  <%- include("../partials/footer") %>
+  <%- include("../partials/body-close") %>
+</html>
