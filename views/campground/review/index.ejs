@@ -26,10 +26,41 @@
         class="accordion-collapse collapse"
         data-bs-parent="#accordion<% n %>"
         id="edit<%= n %>"
-        action="/campgrounds/<%= campground.id %>/reviews?_method=DELETE"
+        action="/campgrounds/<%= campground.id %>/reviews?_method=PUT"
         method="post"
       >
-        <input type="text" name="" id="" />
+        <!-- BODY -->
+        <div class="mb-3 w-100">
+          <label for="body" class="form-label">Review:</label>
+          <textarea
+            required
+            placeholder="Review"
+            name="body"
+            id="body"
+            class="form-control"
+          >
+<%= review.body %></textarea
+          >
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please write a review.</div>
+        </div>
+        <!-- RATING -->
+        <div class="mb-3">
+          <label for="rating" class="form-label">Rating</label>
+          <input
+            required
+            name="rating"
+            id="rating"
+            class="form-range form-control"
+            type="range"
+            min="0"
+            max="5"
+            value="<%= review.rating %>"
+          />
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please set a rating</div>
+        </div>
+        <!-- ID -->
         <input
           class="d-none"
           type="text"
@@ -53,7 +84,7 @@
     <!-- BOTONES  -->
     <div class="d-flex align-items-center justify-content-center gap-1">
       <form
-        action="/campgrounds/<%= campground.id %>/reviews?_method=PUT"
+        action="/campgrounds/<%= campground.id %>/reviews?_method=DELETE"
         method="post"
       >
         <input

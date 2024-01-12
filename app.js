@@ -180,7 +180,11 @@ app.post(
 app.put(
   "/campgrounds/:id/reviews",
   catchAsync(async (req, res, next) => {
-    const { id } = req.params;
+    const { idReview, body, rating } = req.body;
+    const updatedReview = await Review.findByIdAndUpdate(idReview, {
+      $push: { body, rating },
+    });
+    if (updatedReview) res.redirect("back");
   })
 );
 // SHOW EDIT REVIEW FORM
@@ -192,10 +196,12 @@ app.delete(
     const { id } = req.params;
     const { idReview } = req.body;
     console.log(idReview);
-    await Campground.findByIdAndUpdate(id, {
+    updatedCampground = await Campground.findByIdAndUpdate(id, {
       $pull: { reviews: idReview },
     });
-    await Review.findByIdAndDelete(idReview);
+    deletedReview = await Review.findByIdAndDelete(idReview);
+    console.log(updatedCampground);
+    console.log(deletedReview);
     res.redirect("back");
   })
 );
