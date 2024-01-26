@@ -8,7 +8,7 @@ const path = require("path");
 // INTERNAL DEPENDENCIES
 const AppError = require("./utils/AppError");
 const { catchAsync, catchSync } = require("./utils/catchers");
-const { campgroundSchema } = require("./validation/schemas");
+const { campgroundSchema, reviewSchema } = require("./validation/schemas");
 
 // EXPRESS CONSTS
 const app = express();
@@ -35,7 +35,32 @@ async function main() {
 
 // JOI SCHEMAS MIDDLEWARE
 const campgroundSchemaCheck = catchAsync(async (req, res, next) => {
-  const { error } = campgroundSchema.validate(req.body);
+  const { title, image, price, description, location } = req.body;
+  const { error } = campgroundSchema.validate({
+    campground: {
+      title,
+      image,
+      price,
+      description,
+      location,
+    },
+  });
+  if (error) {
+    const msg = error.details.map((x) => x.message).join(", ");
+    return next(new AppError(msg, 400));
+  } else {
+    next();
+  }
+});
+
+const reviewSchemaCheck = catchAsync(async (req, res, next) => {
+  const { rating, body } = req.body;
+  const { error } = reviewSchema.validate({
+    review: {
+      rating,
+      body,
+    },
+  });
   if (error) {
     const msg = error.details.map((x) => x.message).join(", ");
     return next(new AppError(msg, 400));
@@ -160,6 +185,7 @@ app.delete(
 // CREATE NEW REVIEW
 app.post(
   "/campgrounds/:id/reviews",
+  reviewSchemaCheck,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const { body, rating } = req.body;
@@ -179,10 +205,12 @@ app.post(
 // EDIT REVIEW
 app.put(
   "/campgrounds/:id/reviews",
+  reviewSchemaCheck,
   catchAsync(async (req, res, next) => {
     const { idReview, body, rating } = req.body;
     const updatedReview = await Review.findByIdAndUpdate(idReview, {
-      $push: { body, rating },
+      body,
+      rating,
     });
     if (updatedReview) res.redirect("back");
   })
