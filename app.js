@@ -8,7 +8,9 @@ const path = require("path");
 // INTERNAL DEPENDENCIES
 const AppError = require("./utils/AppError");
 const { catchAsync, catchSync } = require("./utils/catchers");
-const { campgroundSchema, reviewSchema } = require("./validation/schemas");
+// ROUTES
+const campgrounds = require("./routes/campgrounds");
+const reviews = require("./routes/reviews");
 
 // EXPRESS CONSTS
 const app = express();
@@ -16,8 +18,6 @@ const port = 3000;
 const dbPath = "mongodb://127.0.0.1:27017/yelp-camp";
 
 // MONGOOSE MODELS
-const Campground = require("./models/campground");
-const Review = require("./models/review");
 
 // MONGOOSE SETUP
 async function main() {
@@ -34,40 +34,7 @@ async function main() {
 }
 
 // JOI SCHEMAS MIDDLEWARE
-const campgroundSchemaCheck = catchAsync(async (req, res, next) => {
-  const { title, image, price, description, location } = req.body;
-  const { error } = campgroundSchema.validate({
-    campground: {
-      title,
-      image,
-      price,
-      description,
-      location,
-    },
-  });
-  if (error) {
-    const msg = error.details.map((x) => x.message).join(", ");
-    return next(new AppError(msg, 400));
-  } else {
-    next();
-  }
-});
 
-const reviewSchemaCheck = catchAsync(async (req, res, next) => {
-  const { rating, body } = req.body;
-  const { error } = reviewSchema.validate({
-    review: {
-      rating,
-      body,
-    },
-  });
-  if (error) {
-    const msg = error.details.map((x) => x.message).join(", ");
-    return next(new AppError(msg, 400));
-  } else {
-    next();
-  }
-});
 // EXPRESS APP SET
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -79,158 +46,15 @@ app.use(methodOverride("_method"));
 // LOGGER
 app.use(morgan("tiny"));
 
+// EXPRESS APP USE MIDDLEWARE ROUTER
+app.use("/campgrounds", campgrounds);
+app.use("/", reviews);
+
 // GET HOME VIEW
 app.get(
   "/",
   catchSync((req, res, next) => {
     res.render("home", { name: "Yelp Camp" });
-  })
-);
-
-// CAMPGROUND OPERATIONS
-// CREATE
-// CREATE NEW CAMPGROUND
-app.post(
-  "/campgrounds",
-  campgroundSchemaCheck,
-  catchAsync(async (req, res, next) => {
-    console.dir(req.body);
-    const { title, price, description, location, image } = req.body;
-    const newCampground = new Campground({
-      title,
-      price,
-      description,
-      location,
-      image,
-    });
-    await newCampground.save();
-    res.redirect("/campgrounds");
-  })
-);
-// SHOW CREATE NEW CAMPGROUND FORM
-app.get(
-  "/campgrounds/create",
-  catchSync((req, res, next) => {
-    res.render("campground/create", { name: "Create New Campground" });
-  })
-);
-
-// READ
-// SHOW ALL CAMPGROUNDS
-app.get(
-  "/campgrounds",
-  catchAsync(async (req, res, next) => {
-    const campgrounds = await Campground.find();
-    res.render("campground/index", { campgrounds, name: "Campgrounds" });
-  })
-);
-// SHOW CAMPGROUND WITH ID
-app.get(
-  "/campgrounds/:id",
-  catchAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const campground = await Campground.findById(id).populate("reviews");
-    res.render("campground/details", { campground, name: campground.title });
-  })
-);
-
-// UPDATE
-// EDIT CAMPGROUND BY ID
-app.put(
-  "/campgrounds/:id",
-  campgroundSchemaCheck,
-  catchAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const { title, price, description, location, image } = req.body;
-    const campgroundEdited = await Campground.findByIdAndUpdate(
-      id,
-      {
-        title,
-        price,
-        description,
-        location,
-        image,
-      },
-      { runValidators: true }
-    );
-    if (campgroundEdited) res.redirect(303, `/campgrounds/${id}`);
-  })
-);
-// SHOW EDIT CAMPGROUND BY ID FORM
-app.get(
-  "/campgrounds/:id/edit",
-  catchAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const campground = await Campground.findById(id);
-    res.render("campground/edit", {
-      campground,
-      name: `Edit ${campground.title}`,
-    });
-  })
-);
-
-// DELETE
-// DELETE CAMPGROUND BY ID
-app.delete(
-  "/campgrounds/:id",
-  catchAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const campgroundDeleted = await Campground.findByIdAndDelete(id);
-    if (campgroundDeleted) res.redirect(303, "/campgrounds");
-  })
-);
-
-// CAMPGROUND REVIEWS OPERATIONS
-// CREATE
-// CREATE NEW REVIEW
-app.post(
-  "/campgrounds/:id/reviews",
-  reviewSchemaCheck,
-  catchAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const { body, rating } = req.body;
-    const review = new Review({ body, rating });
-    const savedReview = await review.save();
-    const updatedCampground = await Campground.findByIdAndUpdate(id, {
-      $push: { reviews: savedReview._id },
-    });
-    if (updatedCampground) res.redirect("back");
-  })
-);
-// db.campgrounds.find({_id: ObjectId("64d698bd4c68967599ddefc8")})
-
-// SHOW CREATE NEW REVIEW FORM
-// READ
-// UPDATE
-// EDIT REVIEW
-app.put(
-  "/campgrounds/:id/reviews",
-  reviewSchemaCheck,
-  catchAsync(async (req, res, next) => {
-    const { idReview, body, rating } = req.body;
-    const updatedReview = await Review.findByIdAndUpdate(idReview, {
-      body,
-      rating,
-    });
-    if (updatedReview) res.redirect("back");
-  })
-);
-// SHOW EDIT REVIEW FORM
-// DELETE
-// DELETE REVIEW
-app.delete(
-  "/campgrounds/:id/reviews",
-  catchAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const { idReview } = req.body;
-    console.log(idReview);
-    updatedCampground = await Campground.findByIdAndUpdate(id, {
-      $pull: { reviews: idReview },
-    });
-    deletedReview = await Review.findByIdAndDelete(idReview);
-    console.log(updatedCampground);
-    console.log(deletedReview);
-    res.redirect("back");
   })
 );
 
