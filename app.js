@@ -48,7 +48,7 @@ app.use(morgan("tiny"));
 
 // EXPRESS APP USE MIDDLEWARE ROUTER
 app.use("/campgrounds", campgrounds);
-app.use("/", reviews);
+app.use("/campgrounds/:id/reviews", reviews);
 
 // GET HOME VIEW
 app.get(

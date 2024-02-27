@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 const { reviewSchema } = require("../validation/schemas");
 // INTERNAL DEPENDENCIES
 const { catchAsync, catchSync } = require("../utils/catchers");
@@ -7,6 +7,7 @@ const AppError = require("../utils/AppError");
 
 // MONGOOSE MODELS
 const Review = require("../models/review");
+const Campground = require("../models/campground");
 
 // JOI SCHEMAS MIDDLEWARE
 const reviewSchemaCheck = catchAsync(async (req, res, next) => {
@@ -29,7 +30,7 @@ const reviewSchemaCheck = catchAsync(async (req, res, next) => {
 // CREATE
 // CREATE NEW REVIEW
 router.post(
-  "/campgrounds/:id/reviews",
+  "/",
   reviewSchemaCheck,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
@@ -49,7 +50,7 @@ router.post(
 // UPDATE
 // EDIT REVIEW
 router.put(
-  "/campgrounds/:id/reviews",
+  "/",
   reviewSchemaCheck,
   catchAsync(async (req, res, next) => {
     const { idReview, body, rating } = req.body;
@@ -64,7 +65,7 @@ router.put(
 // DELETE
 // DELETE REVIEW
 router.delete(
-  "/campgrounds/:id/reviews",
+  "/",
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const { idReview } = req.body;
