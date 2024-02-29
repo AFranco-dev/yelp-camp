@@ -4,6 +4,7 @@ const express = require("express");
 const methodOverride = require("method-override");
 const morgan = require("morgan");
 const path = require("path");
+const session = require("express-session");
 
 // INTERNAL DEPENDENCIES
 const AppError = require("./utils/AppError");
@@ -45,6 +46,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 // LOGGER
 app.use(morgan("tiny"));
+// SESSION
+const sessionConfig = {
+  secret: "thisnotasecret",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 27,
+    maxAge: 1000 * 60 * 60 * 24 * 27,
+  },
+};
+app.use(session(sessionConfig));
 
 // EXPRESS APP USE MIDDLEWARE ROUTER
 app.use("/campgrounds", campgrounds);
