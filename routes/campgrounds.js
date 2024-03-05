@@ -45,14 +45,17 @@ router.post(
       image,
     });
     await newCampground.save();
-    res.redirect("");
+    req.flash("success", "Successfully made a new Campground!");
+    res.redirect(`/campgrounds/${newCampground._id}`);
   })
 );
 // SHOW CREATE NEW CAMPGROUND FORM
 router.get(
   "/create",
   catchSync((req, res, next) => {
-    res.render("campground/create", { name: "Create New Campground" });
+    res.render("campground/create", {
+      name: "Create New Campground",
+    });
   })
 );
 

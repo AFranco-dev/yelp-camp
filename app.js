@@ -5,6 +5,7 @@ const methodOverride = require("method-override");
 const morgan = require("morgan");
 const path = require("path");
 const session = require("express-session");
+const flash = require("connect-flash");
 
 // INTERNAL DEPENDENCIES
 const AppError = require("./utils/AppError");
@@ -44,6 +45,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(flash());
 // LOGGER
 app.use(morgan("tiny"));
 // SESSION
@@ -58,6 +60,13 @@ const sessionConfig = {
   },
 };
 app.use(session(sessionConfig));
+
+// FLASH MIDDLEWARE
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
 
 // EXPRESS APP USE MIDDLEWARE ROUTER
 app.use("/campgrounds", campgrounds);
