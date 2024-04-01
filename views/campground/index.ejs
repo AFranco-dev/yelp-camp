@@ -4,59 +4,55 @@
   <%- include("../partials/head") %>
   <%- include("../partials/body-open") %>
   <%- include("../partials/navbar") %>
-  <main class="container my-5">
-    <ul
-      class="list-unstyled gap-1 mw-100 mb-3 p-3 d-flex align-items-center justify-content-center flex-wrap"
-    >
-      <% for( const campground of campgrounds ) { %>
-      <li class="mb-3">
-        <div class="card" style="width: 300px; height: 600px">
-          <img src="<%= campground.image %>" class="card-img-top" alt="..." />
-          <div class="card-body d-flex flex-column justify-content-between">
-            <div>
-              <h5 class="card-title"><%= campground.title %></h5>
-              <p class="card-text">
-                <% if (campground.description) { %> <% if
-                (campground.description.length < 90) { %> <%=
-                campground.description %> <% } else { %> <%=
-                campground.description.substring(0,90).concat("...") %> <% } %>
-                <% } else { %> No Description <% } %>
-              </p>
-            </div>
-            <div
-              class="gap-1 p-1 d-flex align-items-center justify-content-center"
-            >
-              <a
-                class="mt-auto btn btn-primary"
-                href="/campgrounds/<%= campground.id %>"
-              >
-                Details
-              </a>
-              <form
-                action="/campgrounds/<%= campground.id %>?_method=DELETE"
-                method="post"
-              >
-                <button class="btn btn-danger" type="submit">Delete</button>
-              </form>
-            </div>
+  <%- include("../partials/main-open") %>
+  <ul
+    class="list-unstyled gap-1 mw-100 mb-3 p-3 d-flex align-items-center justify-content-center flex-wrap"
+  >
+    <% for( const campground of campgrounds ) { %>
+    <li class="mb-3">
+      <div class="card" style="width: 300px; height: 600px">
+        <img src="<%= campground.image %>" class="card-img-top" alt="..." />
+        <div class="card-body d-flex flex-column justify-content-between">
+          <div>
+            <h5 class="card-title"><%= campground.title %></h5>
+            <p class="card-text">
+              <% if (campground.description) { %> <% if
+              (campground.description.length < 90) { %> <%=
+              campground.description %> <% } else { %> <%=
+              campground.description.substring(0,90).concat("...") %> <% } %> <%
+              } else { %> No Description <% } %>
+            </p>
           </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              Location: <%= campground.location %>
-            </li>
-            <li class="list-group-item">Price: <%= campground.price %></li>
-          </ul>
+          <div
+            class="gap-1 p-1 d-flex align-items-center justify-content-center"
+          >
+            <a
+              class="mt-auto btn btn-primary"
+              href="/campgrounds/<%= campground.id %>"
+            >
+              Details
+            </a>
+            <form
+              action="/campgrounds/<%= campground.id %>?_method=DELETE"
+              method="post"
+            >
+              <button class="btn btn-danger" type="submit">Delete</button>
+            </form>
+          </div>
         </div>
-      </li>
-      <% } %>
-    </ul>
-    <div class="w-100 text-center">
-      <a href="campgrounds/create" class="btn btn-primary">
-        Create New Campground
-      </a>
-    </div>
-  </main>
-  <!-- prettier-ignore -->
-  <%- include("../partials/footer") %>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Location: <%= campground.location %></li>
+          <li class="list-group-item">Price: <%= campground.price %></li>
+        </ul>
+      </div>
+    </li>
+    <% } %>
+  </ul>
+  <div class="w-100 text-center">
+    <a href="campgrounds/create" class="btn btn-primary">
+      Create New Campground
+    </a>
+  </div>
+  <%- include("../partials/main-close") %> <%- include("../partials/footer") %>
   <%- include("../partials/body-close") %>
 </html>

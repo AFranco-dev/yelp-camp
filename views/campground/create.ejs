@@ -4,78 +4,76 @@
   <%- include("../partials/head") %>
   <%- include("../partials/body-open") %>
   <%- include("../partials/navbar") %>
-  <main class="container my-5">
-    <h1 class="mb-3">Create New Campground</h1>
-    <form
-      class="needs-validation"
-      action="/campgrounds"
-      method="POST"
-      novalidate
-    >
-      <div class="mb-3">
-        <label for="title" class="form-label">Title:</label
-        ><input
-          required
-          placeholder="Title"
-          name="title"
-          id="title"
-          class="form-control"
-        />
-        <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please choose a username.</div>
-      </div>
-      <div class="mb-3">
-        <label for="image" class="form-label">Image URL:</label
-        ><input
-          required
-          placeholder="Image URL"
-          name="image"
-          id="image"
-          class="form-control"
-        />
-        <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please choose a username.</div>
-      </div>
-      <div class="mb-3">
-        <label for="price" class="form-label">Price:</label
-        ><input
-          required
-          placeholder="Price"
-          name="price"
-          id="price"
-          type="number"
-          class="form-control"
-        />
-        <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please choose a username.</div>
-      </div>
-      <div class="mb-3">
-        <label for="description" class="form-label">Description:</label
-        ><textarea
-          required
-          placeholder="Description"
-          name="description"
-          id="description"
-          class="form-control"
-        ></textarea>
-        <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please choose a username.</div>
-      </div>
-      <div class="mb-3">
-        <label for="location" class="form-label">Location:</label
-        ><input
-          required
-          placeholder="Location"
-          name="location"
-          id="location"
-          class="form-control"
-        />
-        <div class="valid-feedback">Looks good!</div>
-        <div class="invalid-feedback">Please choose a username.</div>
-      </div>
-      <button class="btn btn-primary" type="submit">Create</button>
-    </form>
-  </main>
+  <%- include("../partials/main-open") %>
+  <%- include("../partials/flash-success") %>
+  <!-- <main class="container my-5"> -->
+  <h1 class="mb-3">Create New Campground</h1>
+  <form class="needs-validation" action="/campgrounds" method="POST" novalidate>
+    <div class="mb-3">
+      <label for="title" class="form-label">Title:</label
+      ><input
+        required
+        placeholder="Title"
+        name="title"
+        id="title"
+        class="form-control"
+      />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please choose a username.</div>
+    </div>
+    <div class="mb-3">
+      <label for="image" class="form-label">Image URL:</label
+      ><input
+        required
+        placeholder="Image URL"
+        name="image"
+        id="image"
+        class="form-control"
+      />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please choose a username.</div>
+    </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Price:</label
+      ><input
+        required
+        placeholder="Price"
+        name="price"
+        id="price"
+        type="number"
+        class="form-control"
+      />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please choose a username.</div>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description:</label
+      ><textarea
+        required
+        placeholder="Description"
+        name="description"
+        id="description"
+        class="form-control"
+      ></textarea>
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please choose a username.</div>
+    </div>
+    <div class="mb-3">
+      <label for="location" class="form-label">Location:</label
+      ><input
+        required
+        placeholder="Location"
+        name="location"
+        id="location"
+        class="form-control"
+      />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please choose a username.</div>
+    </div>
+    <button class="btn btn-primary" type="submit">Create</button>
+  </form>
+  <%- include("../partials/main-close") %>
+  <!-- </main> -->
   <script>
     (() => {
       "use strict";

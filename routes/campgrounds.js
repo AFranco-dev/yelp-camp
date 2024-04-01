@@ -97,7 +97,10 @@ router.put(
       },
       { runValidators: true }
     );
-    if (campgroundEdited) res.redirect(303, `/${id}`);
+    if (campgroundEdited) {
+      req.flash("success", "Successfully edited a Campground!");
+      res.redirect(303, `/campgrounds/${id}`);
+    }
   })
 );
 // SHOW EDIT CAMPGROUND BY ID FORM
@@ -120,7 +123,13 @@ router.delete(
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const campgroundDeleted = await Campground.findByIdAndDelete(id);
-    if (campgroundDeleted) res.redirect(303, "/campgrounds");
+    if (campgroundDeleted) {
+      req.flash(
+        "success",
+        `Successfully deleted the campground ${campgroundDeleted.title}!`
+      );
+      res.redirect(303, "/campgrounds");
+    }
   })
 );
 

@@ -40,7 +40,10 @@ router.post(
     const updatedCampground = await Campground.findByIdAndUpdate(id, {
       $push: { reviews: savedReview._id },
     });
-    if (updatedCampground) res.redirect("back");
+    if (updatedCampground) {
+      req.flash("success", `Successfully created the review!`);
+      res.redirect("back");
+    }
   })
 );
 // db.campgrounds.find({_id: ObjectId("64d698bd4c68967599ddefc8")})
@@ -58,7 +61,10 @@ router.put(
       body,
       rating,
     });
-    if (updatedReview) res.redirect("back");
+    if (updatedReview) {
+      req.flash("success", `Successfully edited the review!`);
+      res.redirect("back");
+    }
   })
 );
 // SHOW EDIT REVIEW FORM
@@ -73,10 +79,13 @@ router.delete(
     updatedCampground = await Campground.findByIdAndUpdate(id, {
       $pull: { reviews: idReview },
     });
-    deletedReview = await Review.findByIdAndDelete(idReview);
+    const deletedReview = await Review.findByIdAndDelete(idReview);
     console.log(updatedCampground);
     console.log(deletedReview);
-    res.redirect("back");
+    if (deletedReview) {
+      req.flash("success", `Successfully deleted the review!`);
+      res.redirect("back");
+    }
   })
 );
 

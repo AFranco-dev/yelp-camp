@@ -4,9 +4,11 @@
   <%- include("../partials/head") %>
   <%- include("../partials/body-open") %>
   <%- include("../partials/navbar") %>
-  <main
+  <!-- <main
     class="container my-5 d-flex flex-column align-items-center justify-content-center"
-  >
+  > -->
+  <%- include("../partials/main-open") %>
+  <div class="d-flex flex-column align-items-center justify-content-center">
     <div class="card" style="width: 80%; max-width: 400px; min-height: 400px">
       <img src="<%= campground.image %>" class="card-img-top" alt="..." />
       <div class="card-body">
@@ -54,7 +56,9 @@
         <%- include("./review/create") %>
       </div>
     </div>
-  </main>
+  </div>
+  <%- include("../partials/main-close") %>
+  <!-- </main> -->
   <!-- prettier-ignore -->
   <%- include("../partials/footer") %>
   <%- include("../partials/body-close") %>
