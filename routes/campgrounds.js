@@ -74,6 +74,10 @@ router.get(
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findById(id).populate("reviews");
+    if (!campground) {
+      req.flash("error", "Cannot find that campground");
+      return res.redirect("/campgrounds");
+    }
     res.render("campground/details", { campground, name: campground.title });
   })
 );
@@ -97,6 +101,10 @@ router.put(
       },
       { runValidators: true }
     );
+    if (!campground) {
+      req.flash("error", "Cannot find that campground");
+      return res.redirect("/campgrounds");
+    }
     if (campgroundEdited) {
       req.flash("success", "Successfully edited a Campground!");
       res.redirect(303, `/campgrounds/${id}`);
@@ -109,6 +117,10 @@ router.get(
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);
+    if (!campground) {
+      req.flash("error", "Cannot find that campground");
+      return res.redirect("/campgrounds");
+    }
     res.render("campground/edit", {
       campground,
       name: `Edit ${campground.title}`,
