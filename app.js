@@ -6,10 +6,16 @@ const morgan = require("morgan");
 const path = require("path");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
 
 // INTERNAL DEPENDENCIES
 const AppError = require("./utils/AppError");
 const { catchAsync, catchSync } = require("./utils/catchers");
+/**
+ * @type {mongoose.SchemaDefinitionProperty}
+ */
+const User = require("./models/user");
 // ROUTES
 const campgrounds = require("./routes/campgrounds");
 const reviews = require("./routes/reviews");
@@ -18,6 +24,19 @@ const reviews = require("./routes/reviews");
 const app = express();
 const port = 3000;
 const dbPath = "mongodb://127.0.0.1:27017/yelp-camp";
+
+// DEPENDENCIES CONSTS
+// SESSION
+const sessionConfig = {
+  secret: "thisnotasecret",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 27,
+    maxAge: 1000 * 60 * 60 * 24 * 27,
+  },
+};
 
 // MONGOOSE MODELS
 
@@ -46,20 +65,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(flash());
+app.use(session(sessionConfig));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// PASSPORT SETUP
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 // LOGGER
 app.use(morgan("tiny"));
-// SESSION
-const sessionConfig = {
-  secret: "thisnotasecret",
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    httpOnly: true,
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 27,
-    maxAge: 1000 * 60 * 60 * 24 * 27,
-  },
-};
-app.use(session(sessionConfig));
 
 // FLASH MIDDLEWARE
 app.use((req, res, next) => {
