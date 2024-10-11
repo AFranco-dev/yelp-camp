@@ -12,13 +12,11 @@ const LocalStrategy = require("passport-local");
 // INTERNAL DEPENDENCIES
 const AppError = require("./utils/AppError");
 const { catchAsync, catchSync } = require("./utils/catchers");
-/**
- * @type {mongoose.SchemaDefinitionProperty}
- */
 const User = require("./models/user");
 // ROUTES
-const campgrounds = require("./routes/campgrounds");
-const reviews = require("./routes/reviews");
+const campgroundsRouter = require("./routes/campgrounds");
+const reviewsRouter = require("./routes/reviews");
+const usersRouter = require("./routes/users");
 
 // EXPRESS CONSTS
 const app = express();
@@ -85,8 +83,9 @@ app.use((req, res, next) => {
 });
 
 // EXPRESS APP USE MIDDLEWARE ROUTER
-app.use("/campgrounds", campgrounds);
-app.use("/campgrounds/:id/reviews", reviews);
+app.use("/campgrounds", campgroundsRouter);
+app.use("/campgrounds/:id/reviews", reviewsRouter);
+app.use("/", usersRouter);
 
 // GET HOME VIEW
 app.get(
