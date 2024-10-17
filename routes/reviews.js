@@ -4,6 +4,7 @@ const { reviewSchema } = require("../validation/schemas");
 // INTERNAL DEPENDENCIES
 const { catchAsync, catchSync } = require("../utils/catchers");
 const AppError = require("../utils/AppError");
+const { isLoggedIn } = require("../utils/middleware");
 
 // MONGOOSE MODELS
 const Review = require("../models/review");
@@ -31,6 +32,7 @@ const reviewSchemaCheck = catchAsync(async (req, res, next) => {
 // CREATE NEW REVIEW
 router.post(
   "/",
+  isLoggedIn,
   reviewSchemaCheck,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
@@ -54,6 +56,7 @@ router.post(
 // EDIT REVIEW
 router.put(
   "/",
+  isLoggedIn,
   reviewSchemaCheck,
   catchAsync(async (req, res, next) => {
     const { idReview, body, rating } = req.body;
@@ -72,6 +75,7 @@ router.put(
 // DELETE REVIEW
 router.delete(
   "/",
+  isLoggedIn,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const { idReview } = req.body;

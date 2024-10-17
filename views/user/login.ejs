@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <!-- PARTIALS PARTIALS PARTIALS PARTIALS PARTIALS PARTIALS -->
+  <!-- prettier-ignore -->
+  <%- include("../partials/head") %>
+  <%- include("../partials/body-open") %>
+  <%- include("../partials/navbar") %>
+  <%- include("../partials/main-open") %>
+  <%- include("../partials/flash-success") %>
+  <!-- PARTIALS PARTIALS PARTIALS PARTIALS PARTIALS PARTIALS -->
+
+  <h1 class="mb-3">Register</h1>
+  <form class="needs-validation" action="/login" method="POST" novalidate>
+    <div class="mb-3">
+      <label for="username" class="form-label">Username:</label
+      ><input
+        required
+        placeholder="Username"
+        name="username"
+        id="username"
+        class="form-control"
+      />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please choose a username.</div>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password:</label
+      ><input
+        required
+        placeholder="password"
+        name="password"
+        id="password"
+        type="password"
+        class="form-control"
+      />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please choose a password.</div>
+    </div>
+    <button class="btn btn-primary" type="submit">Login</button>
+  </form>
+
+  <!-- PARTIALS PARTIALS PARTIALS PARTIALS PARTIALS PARTIALS -->
+  <!-- prettier-ignore -->
+  <%- include("../partials/main-close") %>
+  <!-- PARTIALS PARTIALS PARTIALS PARTIALS PARTIALS PARTIALS -->
+  <script>
+    (() => {
+      "use strict";
+
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      const forms = document.querySelectorAll(".needs-validation");
+
+      // Loop over them and prevent submission
+      Array.from(forms).forEach((form) => {
+        form.addEventListener(
+          "submit",
+          (event) => {
+            if (!form.checkValidity()) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+
+            form.classList.add("was-validated");
+          },
+          false
+        );
+      });
+    })();
+  </script>
+  <!-- PARTIALS PARTIALS PARTIALS PARTIALS PARTIALS PARTIALS -->
+  <!-- prettier-ignore -->
+  <%- include("../partials/footer") %>
+  <%- include("../partials/body-close") %>
+  <!-- PARTIALS PARTIALS PARTIALS PARTIALS PARTIALS PARTIALS -->
+</html>

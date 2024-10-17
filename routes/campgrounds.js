@@ -4,6 +4,7 @@ const { campgroundSchema } = require("../validation/schemas");
 // INTERNAL DEPENDENCIES
 const { catchAsync, catchSync } = require("../utils/catchers");
 const AppError = require("../utils/AppError");
+const { isLoggedIn } = require("../utils/middleware");
 
 // MONGOOSE MODELS
 const Campground = require("../models/campground");
@@ -33,6 +34,7 @@ const campgroundSchemaCheck = catchAsync(async (req, res, next) => {
 // CREATE NEW CAMPGROUND
 router.post(
   "",
+  isLoggedIn,
   campgroundSchemaCheck,
   catchAsync(async (req, res, next) => {
     console.dir(req.body);
@@ -52,6 +54,7 @@ router.post(
 // SHOW CREATE NEW CAMPGROUND FORM
 router.get(
   "/create",
+  isLoggedIn,
   catchSync((req, res, next) => {
     res.render("campground/create", {
       name: "Create New Campground",
@@ -86,6 +89,7 @@ router.get(
 // EDIT CAMPGROUND BY ID
 router.put(
   "/:id",
+  isLoggedIn,
   campgroundSchemaCheck,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
@@ -114,6 +118,7 @@ router.put(
 // SHOW EDIT CAMPGROUND BY ID FORM
 router.get(
   "/:id/edit",
+  isLoggedIn,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);
@@ -132,6 +137,7 @@ router.get(
 // DELETE CAMPGROUND BY ID
 router.delete(
   "/:id",
+  isLoggedIn,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const campgroundDeleted = await Campground.findByIdAndDelete(id);

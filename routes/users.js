@@ -1,5 +1,7 @@
+// EXTERNAL DEPENDENCIES
 const express = require("express");
 const router = express.Router({ mergeParams: true });
+const passport = require("passport");
 
 // INTERNAL DEPENDENCIES
 const { catchAsync, catchSync } = require("../utils/catchers");
@@ -34,6 +36,27 @@ router.post(
       req.flash("error", error.message);
       res.redirect("/register");
     }
+  })
+);
+
+// SHOW LOGIN USER FORM
+router.get(
+  "/login",
+  catchSync((req, res, next) => {
+    res.render("user/login", { name: "Login" });
+  })
+);
+
+// LOGIN USER
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    failureFlash: true,
+    failureRedirect: "/login",
+  }),
+  catchAsync(async (req, res, next) => {
+    req.flash("success", "Welcome back!");
+    res.redirect("/campgrounds");
   })
 );
 
