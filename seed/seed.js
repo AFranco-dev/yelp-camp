@@ -28,6 +28,8 @@ async function main() {
       const title = `${descriptor} ${place}`;
       // CAMPGROUND CREATION
       const newCampground = new Campground({
+        // THIS ID MUST BE CHANGED TO AN EXISTING USER
+        author: "671178c85f48068416101afb",
         title: title,
         image: "https://source.unsplash.com/random/300x300?sig=1",
         price: randomPrice,
