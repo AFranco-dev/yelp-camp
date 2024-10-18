@@ -6,7 +6,7 @@ const passport = require("passport");
 // INTERNAL DEPENDENCIES
 const { catchAsync, catchSync } = require("../utils/catchers");
 const AppError = require("../utils/AppError");
-const { isLoggedIn } = require("../utils/middleware");
+const { isLoggedIn, storeReturnTo } = require("../utils/middleware");
 
 // MONGOOSE MODELS
 const User = require("../models/user");
@@ -55,13 +55,16 @@ router.get(
 // LOGIN USER
 router.post(
   "/login",
+  storeReturnTo,
   passport.authenticate("local", {
     failureFlash: true,
     failureRedirect: "/login",
   }),
   catchAsync(async (req, res, next) => {
     req.flash("success", "Welcome back!");
-    res.redirect("/campgrounds");
+    const redirectToUrl = res.locals.returnTo || "/campgrounds";
+    delete res.locals.returnTo;
+    res.redirect(redirectToUrl);
   })
 );
 

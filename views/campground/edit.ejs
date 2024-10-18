@@ -6,7 +6,7 @@
   <%- include("../partials/navbar") %>
   <%- include("../partials/main-open") %>
   <!-- <main class="container mt-5"> -->
-  <h1 class="mb-3">Create New Campground</h1>
+  <h1 class="mb-3">Edit Campground <%= campground.title %></h1>
   <form
     class="needs-validation"
     action="/campgrounds/<%= campground.id %>?_method=PUT"
