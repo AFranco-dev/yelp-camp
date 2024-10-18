@@ -75,10 +75,13 @@ passport.deserializeUser(User.deserializeUser());
 // LOGGER
 app.use(morgan("tiny"));
 
-// FLASH MIDDLEWARE
+// GLOBAL SMALL MIDDLEWARE
 app.use((req, res, next) => {
+  // FLASH MIDDLEWARE
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
+  // CURRENT USER MIDDLEWARE
+  res.locals.currentUser = req.user;
   next();
 });
 
