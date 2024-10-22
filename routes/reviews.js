@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
-const { reviewSchema } = require("../validation/schemas");
 // INTERNAL DEPENDENCIES
 const { catchAsync, catchSync } = require("../utils/catchers");
-const AppError = require("../utils/AppError");
 const { isLoggedIn, reviewSchemaCheck } = require("../utils/middleware");
 
 // MONGOOSE MODELS

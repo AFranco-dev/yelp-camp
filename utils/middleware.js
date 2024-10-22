@@ -1,8 +1,9 @@
 // EXTERNAL DEPENDENCIES
-const { campgroundSchema } = require("../validation/schemas");
+const { campgroundSchema, reviewSchema } = require("../validation/schemas");
 // INTERNAL DEPENDENCIES
 const Campground = require("../models/campground");
 const { catchAsync, catchSync } = require("../utils/catchers");
+const AppError = require("../utils/AppError");
 
 // JOI SCHEMAS MIDDLEWARE
 const campgroundSchemaCheck = catchAsync(async (req, res, next) => {
