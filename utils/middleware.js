@@ -1,3 +1,45 @@
+// EXTERNAL DEPENDENCIES
+const { campgroundSchema } = require("../validation/schemas");
+// INTERNAL DEPENDENCIES
+const Campground = require("../models/campground");
+const { catchAsync, catchSync } = require("../utils/catchers");
+
+// JOI SCHEMAS MIDDLEWARE
+const campgroundSchemaCheck = catchAsync(async (req, res, next) => {
+  const { title, image, price, description, location } = req.body;
+  const { error } = campgroundSchema.validate({
+    campground: {
+      title,
+      image,
+      price,
+      description,
+      location,
+    },
+  });
+  if (error) {
+    const msg = error.details.map((x) => x.message).join(", ");
+    return next(new AppError(msg, 400));
+  } else {
+    next();
+  }
+});
+
+const reviewSchemaCheck = catchAsync(async (req, res, next) => {
+  const { rating, body } = req.body;
+  const { error } = reviewSchema.validate({
+    review: {
+      rating,
+      body,
+    },
+  });
+  if (error) {
+    const msg = error.details.map((x) => x.message).join(", ");
+    return next(new AppError(msg, 400));
+  } else {
+    next();
+  }
+});
+
 const isLoggedIn = (req, res, next) => {
   console.log("REQ.USER...", req.user);
   if (!req.isAuthenticated()) {
@@ -13,4 +55,20 @@ const storeReturnTo = (req, res, next) => {
   next();
 };
 
-module.exports = { isLoggedIn, storeReturnTo };
+const isAuthor = async (req, res, next) => {
+  const { id } = req.params;
+  const campground = await Campground.findById(id);
+  if (!campground.author.equals(req.user._id)) {
+    req.flash("error", "You do not have permission to do that!");
+    return res.redirect(`/campgrounds/${id}`);
+  }
+  next();
+};
+
+module.exports = {
+  isLoggedIn,
+  storeReturnTo,
+  isAuthor,
+  campgroundSchemaCheck,
+  reviewSchemaCheck,
+};

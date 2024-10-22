@@ -5,7 +5,7 @@
   <%- include("../partials/body-open") %>
   <%- include("../partials/navbar") %>
   <!-- <main
-    class="container my-5 d-flex flex-column align-items-center justify-content-center"
+  class="container my-5 d-flex flex-column align-items-center justify-content-center"
   > -->
   <%- include("../partials/main-open") %>
   <div class="d-flex flex-column align-items-center justify-content-center">
@@ -17,12 +17,6 @@
         <div
           class="mt-2 d-flex align-items-center justify-content-center gap-1"
         >
-          <a
-            class="mt-auto btn btn-primary"
-            href="/campgrounds/<%= campground.id %>/edit"
-          >
-            Edit
-          </a>
           <button
             class="btn btn-primary"
             type="button"
@@ -33,12 +27,21 @@
           >
             Add Review
           </button>
+          <% if (locals.currentUser &&
+          locals.campground.author.equals(locals.currentUser._id)) { %>
+          <a
+            class="mt-auto btn btn-primary"
+            href="/campgrounds/<%= campground.id %>/edit"
+          >
+            Edit
+          </a>
           <form
             action="/campgrounds/<%= campground.id %>?_method=DELETE"
             method="post"
           >
             <button class="btn btn-danger" type="submit">Delete</button>
           </form>
+          <% } %>
         </div>
       </div>
       <ul class="list-group list-group-flush">

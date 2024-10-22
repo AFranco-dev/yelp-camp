@@ -4,28 +4,11 @@ const { reviewSchema } = require("../validation/schemas");
 // INTERNAL DEPENDENCIES
 const { catchAsync, catchSync } = require("../utils/catchers");
 const AppError = require("../utils/AppError");
-const { isLoggedIn } = require("../utils/middleware");
+const { isLoggedIn, reviewSchemaCheck } = require("../utils/middleware");
 
 // MONGOOSE MODELS
 const Review = require("../models/review");
 const Campground = require("../models/campground");
-
-// JOI SCHEMAS MIDDLEWARE
-const reviewSchemaCheck = catchAsync(async (req, res, next) => {
-  const { rating, body } = req.body;
-  const { error } = reviewSchema.validate({
-    review: {
-      rating,
-      body,
-    },
-  });
-  if (error) {
-    const msg = error.details.map((x) => x.message).join(", ");
-    return next(new AppError(msg, 400));
-  } else {
-    next();
-  }
-});
 
 // CAMPGROUND REVIEWS OPERATIONS
 // CREATE
