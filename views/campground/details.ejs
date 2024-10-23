@@ -17,6 +17,7 @@
         <div
           class="mt-2 d-flex align-items-center justify-content-center gap-1"
         >
+          <% if (locals.currentUser) { %>
           <button
             class="btn btn-primary"
             type="button"
@@ -27,7 +28,7 @@
           >
             Add Review
           </button>
-          <% if (locals.currentUser &&
+          <% } %> <% if (locals.currentUser &&
           locals.campground.author.equals(locals.currentUser._id)) { %>
           <a
             class="mt-auto btn btn-primary"
@@ -51,7 +52,8 @@
         <li class="list-group-item">Location: <%= campground.location %></li>
         <li class="list-group-item">Price: <%= campground.price %></li>
       </ul>
-      <% if (campground.reviews) { %> <%- include("./review/index") %> <%} %>
+      <% if (campground.reviews && campground.reviews.length>0) { %> <%-
+      include("./review/index") %> <%} %>
     </div>
     <div
       class="collapse mt-2"
