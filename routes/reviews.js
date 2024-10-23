@@ -29,7 +29,6 @@ router.post(
     }
   })
 );
-// db.campgrounds.find({_id: ObjectId("64d698bd4c68967599ddefc8")})
 
 // SHOW CREATE NEW REVIEW FORM
 // READ

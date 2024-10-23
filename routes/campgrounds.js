@@ -7,7 +7,7 @@ const { catchAsync, catchSync } = require("../utils/catchers");
 const AppError = require("../utils/AppError");
 const {
   isLoggedIn,
-  isAuthor,
+  isCampgroundAuthor,
   campgroundSchemaCheck,
 } = require("../utils/middleware");
 
@@ -80,7 +80,7 @@ router.get(
 router.put(
   "/:id",
   isLoggedIn,
-  isAuthor,
+  isCampgroundAuthor,
   campgroundSchemaCheck,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
@@ -110,7 +110,7 @@ router.put(
 router.get(
   "/:id/edit",
   isLoggedIn,
-  isAuthor,
+  isCampgroundAuthor,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);
@@ -130,7 +130,7 @@ router.get(
 router.delete(
   "/:id",
   isLoggedIn,
-  isAuthor,
+  isCampgroundAuthor,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const campgroundDeleted = await Campground.findByIdAndDelete(id);

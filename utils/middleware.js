@@ -56,7 +56,7 @@ const storeReturnTo = (req, res, next) => {
   next();
 };
 
-const isAuthor = async (req, res, next) => {
+const isCampgroundAuthor = async (req, res, next) => {
   const { id } = req.params;
   const campground = await Campground.findById(id);
   if (!campground.author.equals(req.user._id)) {
@@ -69,7 +69,7 @@ const isAuthor = async (req, res, next) => {
 module.exports = {
   isLoggedIn,
   storeReturnTo,
-  isAuthor,
+  isCampgroundAuthor,
   campgroundSchemaCheck,
   reviewSchemaCheck,
 };
