@@ -2,7 +2,11 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 // INTERNAL DEPENDENCIES
 const { catchAsync, catchSync } = require("../utils/catchers");
-const { isLoggedIn, reviewSchemaCheck } = require("../utils/middleware");
+const {
+  isLoggedIn,
+  reviewSchemaCheck,
+  isReviewAuthor,
+} = require("../utils/middleware");
 
 // MONGOOSE MODELS
 const Review = require("../models/review");
@@ -38,6 +42,7 @@ router.post(
 router.put(
   "/",
   isLoggedIn,
+  isReviewAuthor,
   reviewSchemaCheck,
   catchAsync(async (req, res, next) => {
     const { idReview, body, rating } = req.body;
@@ -57,6 +62,7 @@ router.put(
 router.delete(
   "/",
   isLoggedIn,
+  isReviewAuthor,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const { idReview } = req.body;

@@ -2,6 +2,7 @@
 const { campgroundSchema, reviewSchema } = require("../validation/schemas");
 // INTERNAL DEPENDENCIES
 const Campground = require("../models/campground");
+const Review = require("../models/review");
 const { catchAsync, catchSync } = require("../utils/catchers");
 const AppError = require("../utils/AppError");
 
@@ -66,10 +67,21 @@ const isCampgroundAuthor = async (req, res, next) => {
   next();
 };
 
+const isReviewAuthor = async (req, res, next) => {
+  const { idReview } = req.body;
+  const review = await Review.findById(idReview);
+  if (!review.author.equals(req.user._id)) {
+    req.flash("error", "You do not have permission to do that!");
+    return res.redirect(`/campgrounds`);
+  }
+  next();
+};
+
 module.exports = {
   isLoggedIn,
   storeReturnTo,
   isCampgroundAuthor,
   campgroundSchemaCheck,
   reviewSchemaCheck,
+  isReviewAuthor,
 };

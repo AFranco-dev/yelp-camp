@@ -18,8 +18,14 @@
         <div class="">
           <span class="fw-bold">Rating:</span> <%= review.rating %>
         </div>
+        <div class="">
+          <span class="fw-bold">Submitted by:</span> <%= review.author.username
+          %>
+        </div>
       </div>
     </div>
+    <% if (locals.currentUser && review.author.equals(locals.currentUser._id)) {
+    %>
     <!-- EDICIÓN -->
     <div class="accordion-item border-0">
       <form
@@ -39,7 +45,7 @@
             id="body"
             class="form-control"
           >
-<%= review.body %></textarea
+  <%= review.body %></textarea
           >
           <div class="valid-feedback">Looks good!</div>
           <div class="invalid-feedback">Please write a review.</div>
@@ -107,6 +113,7 @@
         Edit
       </button>
     </div>
+    <% } %>
   </li>
   <% n++; %> <% }%>
 </ul>
