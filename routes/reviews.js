@@ -18,7 +18,8 @@ router.post(
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const { body, rating } = req.body;
-    const review = new Review({ body, rating });
+    const author = req.user._id;
+    const review = new Review({ body, rating, author });
     const savedReview = await review.save();
     const updatedCampground = await Campground.findByIdAndUpdate(id, {
       $push: { reviews: savedReview._id },
